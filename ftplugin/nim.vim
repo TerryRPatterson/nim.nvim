@@ -11,8 +11,6 @@ let b:did_ftplugin = 1
 setlocal comments=:##,:#,s1:#[,e:]#,fb:-
 setlocal commentstring=#%s
 setlocal foldignore=
-setlocal foldmethod=indent
-setlocal formatoptions-=t formatoptions+=croql
 setlocal include=^\\s*\\(from\\|import\\|include\\)
 setlocal suffixesadd=.nim
 setlocal keywordprg=:NimDocOf
@@ -20,14 +18,6 @@ setlocal iskeyword=a-z,A-Z,48-57,_
 
 " required by the compiler
 setlocal expandtab
-" NEP-1
-if !exists("g:nim_nep1") || g:nim_nep1 != 0
-  setlocal shiftwidth=2 softtabstop=2
-endif
-" compat with g:nim_noremap
-if exists('g:nim_noremap')
-  let g:no_nim_maps = 1
-endif
 
 if exists('loaded_matchit') && !exists('b:match_words')
   let b:match_ignorecase = 0
@@ -39,19 +29,6 @@ endif
 compiler nim
 
 " section movement
-if !exists('no_plugin_maps') && !exists('no_nim_maps')
-  noremap <script> <buffer> <silent> [[ :<C-U>call <SID>nimNextSection(2, v:true, v:false)<lf>
-  noremap <script> <buffer> <silent> ]] :<C-U>call <SID>nimNextSection(2, v:false, v:false)<lf>
-
-  noremap <script> <buffer> <silent> [] :<C-U>call <SID>nimNextSection(1, v:true, v:false)<lf>
-  noremap <script> <buffer> <silent> ][ :<C-U>call <SID>nimNextSection(1, v:false, v:false)<lf>
-
-  xnoremap <script> <buffer> <silent> [[ :<C-U>call <SID>nimNextSection(2, v:true, v:true)<lf>
-  xnoremap <script> <buffer> <silent> ]] :<C-U>call <SID>nimNextSection(2, v:false, v:true)<lf>
-
-  xnoremap <script> <buffer> <silent> [] :<C-U>call <SID>nimNextSection(1, v:true, v:true)<lf>
-  xnoremap <script> <buffer> <silent> ][ :<C-U>call <SID>nimNextSection(1, v:false, v:true)<lf>
-endif
 
 " type:
 "   1. any line that starts with a non-whitespace char following a blank line,
@@ -115,30 +92,6 @@ noremap <script> <buffer> <silent> <Plug>NimStar :execute <SID>nimStar(v:true, v
 noremap <script> <buffer> <silent> <Plug>NimGStar :execute <SID>nimStar(v:false, v:true)<lf>
 noremap <script> <buffer> <silent> <Plug>NimPound :execute <SID>nimStar(v:true, v:false)<lf>
 noremap <script> <buffer> <silent> <Plug>NimGPound :execute <SID>nimStar(v:false, v:false)<lf>
-
-if !exists('no_plugin_maps') && !exists('no_nim_maps')
-  if !hasmapto('<Plug>NimGoToDefBuf')
-    nmap <buffer> gd <Plug>NimGoToDefBuf
-  endif
-  if !hasmapto('<Plug>NimGoToDefSplit')
-    nmap <buffer> gD <Plug>NimGoToDefSplit
-  endif
-  if !hasmapto('<Plug>NimOutline')
-    nmap <buffer> gO <Plug>NimOutline
-  endif
-  if !hasmapto('<Plug>NimStar')
-    nmap <buffer> * <Plug>NimStar
-  endif
-  if !hasmapto('<Plug>NimGStar')
-    nmap <buffer> g* <Plug>NimGStar
-  endif
-  if !hasmapto('<Plug>NimPound')
-    nmap <buffer> * <Plug>NimPound
-  endif
-  if !hasmapto('<Plug>NimGPound')
-    nmap <buffer> g* <Plug>NimGPound
-  endif
-endif
 
 function s:updateSemanticHighlight() abort
   if (!exists('SessionLoad') || !SessionLoad) &&
